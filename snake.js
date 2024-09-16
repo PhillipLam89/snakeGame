@@ -5,6 +5,8 @@ class Snake {
         this.y = y
         this.speedX = speedX
         this.speedY = speedY
+        this.width = this.game.cellSize
+        this.height = this.width //because square
     }
     update() {
         this.x+= this.speedX
@@ -12,6 +14,6 @@ class Snake {
     }
     draw() {
         this.game.ctx.fillStyle = 'pink'
-        this.game.ctx.fillRect(this.x, this.y, 150,20)
+        this.game.ctx.fillRect(this.x, this.y, this.width,this.height)
     }
 }
