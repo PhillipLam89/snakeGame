@@ -25,10 +25,24 @@ class Game {
     }
 
     drawGrid() {
-        
+        // for (let y = 0; y < this.rows; y++) {
+        //     for (let x = 0; x < this.columns; x++) {
+        //         this.ctx.strokeRect(x*this.cellSize, y*this.cellSize,
+        //             this.cellSize, this.cellSize
+        //         )
+        //     }
+        // }
+        let currentRow = 0 
+        while(currentRow < this.rows) {
+            for (let x = 0; x < this.columns; x++) {
+                    this.ctx.strokeRect(x*this.cellSize, currentRow*this.cellSize,
+                    this.cellSize, this.cellSize)
+            }
+            currentRow++
+        }
     }
     render() {
-       
+        this.drawGrid()
         // this.snake.update()
         // this.snake.draw()
     }
