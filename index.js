@@ -4,34 +4,28 @@ class Game {
         this.ctx = context 
         this.width = this.canvas.width
         this.height = this.canvas.height
-        this.snake = new Snake(this,0,0,1,0) //creates snake when game is created
-        
+       
         this.cellSize = 50
-        this.columns = this.width / this.cellSize
-        this.rows = this.height / this.cellSize
+        this.columns = null
+        this.rows = null
 
-
+        this.snake = new Snake(this,0,0,1,0) //creates snake when game is created
+        this.resize(innerWidth,innerHeight)
         window.onresize = (e) => { //must use arrow func for 'this'
           this.resize(e.currentTarget.innerWidth,e.currentTarget.innerHeight)
         }
     }
     resize(width, height) {
-        this.canvas.width = ~~width
-        this.canvas.height = ~~height
+        this.canvas.width = ~~width - width % this.cellSize
+        this.canvas.height = ~~height - height % this.cellSize
         this.width = this.canvas.width 
         this.height = this.canvas.height
-       
+        this.columns = ~~(this.width / this.cellSize)
+        this.rows = ~~(this.height / this.cellSize)
         this.render()
     }
 
     drawGrid() {
-        // for (let y = 0; y < this.rows; y++) {
-        //     for (let x = 0; x < this.columns; x++) {
-        //         this.ctx.strokeRect(x*this.cellSize, y*this.cellSize,
-        //             this.cellSize, this.cellSize
-        //         )
-        //     }
-        // }
         let currentRow = 0 
         while(currentRow < this.rows) {
             for (let x = 0; x < this.columns; x++) {
@@ -43,8 +37,8 @@ class Game {
     }
     render() {
         this.drawGrid()
-        // this.snake.update()
-        // this.snake.draw()
+        this.snake.update()
+        this.snake.draw()
     }
 }
 
