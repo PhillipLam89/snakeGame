@@ -9,7 +9,11 @@ class Game {
         this.columns = null
         this.rows = null
 
-        this.snake = new Snake(this,0,0,1,0) //creates snake when game is created
+        this.eventTimer = 0
+        this.eventInterval = 1200
+        this.updateEvent = false
+
+        this.snake = new Snake(this,0,0,1,0,'magenta') //creates snake when game is created
         this.resize(innerWidth,innerHeight)
         window.onresize = (e) => { //must use arrow func for 'this'
           this.resize(e.currentTarget.innerWidth,e.currentTarget.innerHeight)
@@ -22,7 +26,7 @@ class Game {
         this.height = this.canvas.height
         this.columns = ~~(this.width / this.cellSize)
         this.rows = ~~(this.height / this.cellSize)
-        this.render()
+  
     }
 
     drawGrid() {
@@ -35,10 +39,25 @@ class Game {
             currentRow++
         }
     }
-    render() {
-        this.drawGrid()
-        this.snake.update()
-        this.snake.draw()
+
+    handlePeriodicEvent(deltaTime) {
+        if (this.eventTimer < this.eventInterval) {
+            this.eventTimer+= deltaTime
+            this.updateEvent = false
+        } else {
+            this.eventTimer = 0
+            this.updateEvent = true //we will only render every 200 ms
+        }
+    }
+    render(deltaTime) {
+        this.handlePeriodicEvent(deltaTime)
+        if (this.updateEvent) {
+            this.ctx.clearRect(0,0,this.width, this.height)
+            this.drawGrid()
+            this.snake.update()
+            this.snake.draw()
+        }
+
     }
 }
 
@@ -50,10 +69,13 @@ window.onload = () => {
 
     const game = new Game(canvas, ctx)
    
+    let lastTime = 0
 
-    function animate() {
-        ctx.clearRect(0,0,canvas.width, canvas.height)
-        game.render()
+    function animate(timeStamp) {
+        const deltaTime = timeStamp - lastTime
+        lastTime = timeStamp
+
+        game.render(deltaTime)
         requestAnimationFrame(animate)
     }
     requestAnimationFrame(animate)
