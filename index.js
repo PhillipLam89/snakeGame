@@ -5,15 +5,16 @@ class Game {
         this.width = this.canvas.width
         this.height = this.canvas.height
        
-        this.cellSize = 50
+        this.cellSize = 40
         this.columns = null
         this.rows = null
+        this.gameObj = null
 
         this.eventTimer = 0
-        this.eventInterval = 1200
+        this.eventInterval = 111
         this.updateEvent = false
 
-        this.snake = new Snake(this,0,0,1,0,'magenta') //creates snake when game is created
+
         this.resize(innerWidth,innerHeight)
         window.onresize = (e) => { //must use arrow func for 'this'
           this.resize(e.currentTarget.innerWidth,e.currentTarget.innerHeight)
@@ -26,7 +27,9 @@ class Game {
         this.height = this.canvas.height
         this.columns = ~~(this.width / this.cellSize)
         this.rows = ~~(this.height / this.cellSize)
-  
+        this.player1 = new KeyboardArrows(this,1,0,1,0,'magenta') //creates snake when game is created
+        this.player2 = new KeyboardWASD(this,5,10,1,0,'red') //creates snake when game is created
+        this.gameObj = [this.player1, this.player2]
     }
 
     drawGrid() {
@@ -54,8 +57,11 @@ class Game {
         if (this.updateEvent) {
             this.ctx.clearRect(0,0,this.width, this.height)
             this.drawGrid()
-            this.snake.update()
-            this.snake.draw()
+            this.gameObj.forEach(snake => {
+                snake.draw()
+                snake.update()
+            })
+           
         }
 
     }
