@@ -81,5 +81,26 @@ class KeyboardWASD extends Snake {
 class ComputerAI extends Snake {
     constructor(game,x,y,speedX,speedY,color) {
         super(game,x,y,speedX,speedY,color)
+        this.turnTimer = 0
+        this.turnInterval  = ~~(Math.random() * this.game.columns - 1)  // snake will randomly change direction at random times that update is called
+    }
+    update() {
+        super.update() //to check boundaries and increase speed
+   
+        if (this.turnTimer < this.turnInterval) {
+            this.turnTimer++
+        } else {
+            this.turnTimer = 0
+            this.turn()
+            this.turnInterval  = ~~(Math.random() * this.game.rows - 1)
+        }
+    }
+    turn() { //this is only for AI so it randomly turns
+        if (!this.speedY) { // if snake hasnt been moving up/down, randomly make it either move up or down
+            Math.random() < 0.5 ? this.turnUp() : this.turnDown()
+        } else if (!this.speedX) {
+            Math.random() < 0.5 ? this.turnLeft() : this.turnRight()
+        }
+
     }
 }
