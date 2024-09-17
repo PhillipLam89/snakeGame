@@ -27,13 +27,15 @@ class Game {
         this.height = this.canvas.height
         this.columns = ~~(this.width / this.cellSize)
         this.rows = ~~(this.height / this.cellSize)
-        this.player1 = new KeyboardArrows(this,1,0,1,0,'magenta') //creates snake when game is created
-        this.player2 = new KeyboardWASD(this,5,10,1,0,'red') //creates snake when game is created
-        this.gameObj = [this.player1, this.player2]
+        this.player1 = new KeyboardArrows(this,0,0,0,0,'blue') //creates snake when game is created
+        this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'red') //creates snake when game is created
+        this.player3 = new ComputerAI(this,0,this.rows-1,1,0,'black')
+        this.gameObj = [this.player1, this.player2, this.player3]
     }
 
     drawGrid() {
         let currentRow = 0 
+        this.ctx.strokeStyle = 'goldenrod'
         while(currentRow < this.rows) {
             for (let x = 0; x < this.columns; x++) {
                     this.ctx.strokeRect(x*this.cellSize, currentRow*this.cellSize,
