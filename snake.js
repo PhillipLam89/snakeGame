@@ -9,8 +9,17 @@ class Snake {
         this.width = this.game.cellSize
         this.height = this.width //because square
         this.moving = true
+        this.score = 0
     }
     update() {
+        //check if snake ate the food!
+
+        if (this.game.checkCollision(this, this.game.food)) {
+            this.game.food.reset() // if food is eaten, remove and move it to another random location
+            this.score++
+        }
+
+        //check for boundaries to stop snake from moving
         if (this.x <= 0 && this.speedX < 0
                 ||
             this.x >= this.game.columns - 1 && this.speedX > 0
@@ -31,6 +40,7 @@ class Snake {
         this.game.ctx.fillStyle = this.color
         this.game.ctx.fillRect(this.x * this.game.cellSize, this.y * this.game.cellSize, this.width,this.height)
     }
+
     turnUp() {
         this.speedX = 0
         this.speedY = -1
@@ -86,7 +96,7 @@ class ComputerAI extends Snake {
     }
     update() {
         super.update() //to check boundaries and increase speed
-   
+
         if (this.turnTimer < this.turnInterval) {
             this.turnTimer++
         } else {
