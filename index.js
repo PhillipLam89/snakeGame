@@ -9,6 +9,7 @@ class Game {
         this.columns = null
         this.rows = null
         this.gameObj = null
+        this.food = null
 
         this.eventTimer = 0
         this.eventInterval = 111
@@ -30,7 +31,8 @@ class Game {
         this.player1 = new KeyboardArrows(this,0,0,0,0,'blue') //creates snake when game is created
         this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'red') //creates snake when game is created
         this.player3 = new ComputerAI(this,0,this.rows-1,1,0,'black')
-        this.gameObj = [this.player1, this.player2, this.player3]
+        this.food = new Food(this)
+        this.gameObj = [this.player1, this.player2, this.player3, this.food]
     }
 
     drawGrid() {
@@ -44,7 +46,12 @@ class Game {
             currentRow++
         }
     }
-
+    drawStatusText() {
+        
+    }
+    checkCollision(a,b) {
+        return a.x == b.x && a.y == b.y
+    }
     handlePeriodicEvent(deltaTime) {
         if (this.eventTimer < this.eventInterval) {
             this.eventTimer+= deltaTime
