@@ -10,13 +10,15 @@ class Snake {
         this.height = this.width //because square
         this.moving = true
         this.score = 0
+        this.maxSnakeLength = 5
+        this.segments = []
     }
     update() {
-        //check if snake ate the food!
-
+        //check if snake ate the food
         if (this.game.checkCollision(this, this.game.food)) {
             this.game.food.reset() // if food is eaten, remove and move it to another random location
             this.score++
+            this.maxSnakeLength++
         }
 
         //check for boundaries to stop snake from moving
@@ -34,11 +36,23 @@ class Snake {
         if (this.moving) {
             this.x+= this.speedX
             this.y+= this.speedY
+            this.segments.unshift({x:this.x, y:this.y})
+            this.segments.length > this.maxSnakeLength 
+            &&  this.segments.pop()
+               
+            
         }
     }
     draw() {
-        this.game.ctx.fillStyle = this.color
-        this.game.ctx.fillRect(this.x * this.game.cellSize, this.y * this.game.cellSize, this.width,this.height)
+        this.segments.forEach((segment,i) => {
+            if (i === 0) this.game.ctx.fillStyle = 'deeppink' //head of snake is deeppink
+            else this.game.ctx.fillStyle = this.color
+            this.game.ctx.fillRect(segment.x * this.game.cellSize,
+                                    segment.y * this.game.cellSize,
+                                    this.width,
+                                    this.height)
+        })
+
     }
 
     turnUp() {
