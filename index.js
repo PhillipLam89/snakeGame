@@ -1,3 +1,25 @@
+
+window.onload = (e) => {
+    console.log(e)
+    const canvas = document.getElementById('canvas1')
+    const ctx = canvas.getContext('2d')
+    canvas.width = innerWidth
+    canvas.height = innerHeight
+
+    const game = new Game(canvas, ctx)
+   
+    let lastTime = 0
+
+    function animate(timeStamp) {
+        const deltaTime = timeStamp - lastTime
+        lastTime = timeStamp
+
+        game.render(deltaTime)
+        requestAnimationFrame(animate)
+    }
+    requestAnimationFrame(animate)
+}
+
 class Game {
     constructor(canvas, context) {
         this.canvas = canvas
@@ -24,6 +46,9 @@ class Game {
     resize(width, height) {
         this.canvas.width = ~~width - width % this.cellSize
         this.canvas.height = ~~height - height % this.cellSize
+        this.ctx.fillStyle = 'dodgerblue'
+        this.ctx.font = '40px Impact'
+        this.ctx.textBaseline = 'top'
         this.width = this.canvas.width 
         this.height = this.canvas.height
         this.columns = ~~(this.width / this.cellSize)
@@ -47,7 +72,9 @@ class Game {
         }
     }
     drawStatusText() {
-        
+        this.ctx.fillText('P1: ' + this.player1.score, this.cellSize, this.cellSize)
+        this.ctx.fillText('P2: ' + this.player2.score, this.cellSize, this.cellSize *2.1)
+        this.ctx.fillText('P3: ' + this.player3.score, this.cellSize, this.cellSize*3.2)
     }
     checkCollision(a,b) {
         return a.x == b.x && a.y == b.y
@@ -70,28 +97,8 @@ class Game {
                 snake.draw()
                 snake.update()
             })
-           
+         this.drawStatusText()
         }
 
     }
-}
-
-window.onload = () => {
-    const canvas = document.getElementById('canvas1')
-    const ctx = canvas.getContext('2d')
-    canvas.width = innerWidth
-    canvas.height = innerHeight
-
-    const game = new Game(canvas, ctx)
-   
-    let lastTime = 0
-
-    function animate(timeStamp) {
-        const deltaTime = timeStamp - lastTime
-        lastTime = timeStamp
-
-        game.render(deltaTime)
-        requestAnimationFrame(animate)
-    }
-    requestAnimationFrame(animate)
 }
