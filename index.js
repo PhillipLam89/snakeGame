@@ -34,7 +34,7 @@ class Game {
         this.food = null
 
         this.eventTimer = 0
-        this.eventInterval = 111
+        this.eventInterval = 80
         this.updateEvent = false
 
 

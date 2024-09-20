@@ -12,9 +12,11 @@ class Snake {
         this.score = 0
         this.maxSnakeLength = 5
         this.segments = []
+        this.readyToTurn = true
     }
     update() {
         //check if snake ate the food
+        this.readyToTurn = true //to prevent spam turning
         if (this.game.checkCollision(this, this.game.food)) {
             this.game.food.reset() // if food is eaten, remove and move it to another random location
             this.score++
@@ -45,8 +47,7 @@ class Snake {
     }
     draw() {
         this.segments.forEach((segment,i) => {
-            if (i === 0) this.game.ctx.fillStyle = 'deeppink' //head of snake is deeppink
-            else this.game.ctx.fillStyle = this.color
+            this.game.ctx.fillStyle = i == 0 ? 'deeppink' : this.color  //head of snake is deeppink
             this.game.ctx.fillRect(segment.x * this.game.cellSize,
                                     segment.y * this.game.cellSize,
                                     this.width,
@@ -56,24 +57,37 @@ class Snake {
     }
 
     turnUp() {
-        this.speedX = 0
-        this.speedY = -1
-        this.moving = true
+        if (!this.speedY && this.readyToTurn) { //only allow vertical movement if currently moving horizontally (to prevent snake from reversing on itself)
+            this.speedX = 0
+            this.speedY = -1
+            this.moving = true
+            this.readyToTurn = false
+        }
+
     }
     turnDown() {
-        this.speedX = 0
-        this.speedY = 1
-        this.moving = true
+        if (!this.speedY && this.readyToTurn) {
+            this.speedX = 0
+            this.speedY = 1
+            this.moving = true
+            this.readyToTurn = false
+        }
     }
     turnLeft() {
-        this.speedX = -1
-        this.speedY = 0
-        this.moving = true
+        if (!this.speedX && this.readyToTurn) {
+            this.speedX = -1
+            this.speedY = 0
+            this.moving = true
+            this.readyToTurn = false
+        }
     }
     turnRight() {
-        this.speedX = 1
-        this.speedY = 0
-        this.moving = true
+        if (!this.speedX && this.readyToTurn) {
+            this.speedX = 1
+            this.speedY = 0
+            this.moving = true
+            this.readyToTurn = false
+        }
     }
 }
 
