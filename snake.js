@@ -1,22 +1,40 @@
 class Snake {
-    constructor(game,x,y,speedX,speedY,color) {
+    constructor(game,x,y,speedX,speedY,color,playerName) {
         this.game = game
         this.x = x
         this.y = y
         this.speedX = speedX
         this.speedY = speedY
         this.color = color
+        this.playerName = playerName
         this.width = this.game.cellSize
         this.height = this.width //because square
         this.moving = true
         this.score = 0
-        this.maxSnakeLength = 5
+        this.maxSnakeLength = 3
         this.segments = []
         this.readyToTurn = true
+       
+    }
+    checkSnakeBodyCollision() {
+        const bodyLocation = this.segments.slice(1)
+        const headLocation = this.segments[0]
+        
+        if (this.segments.length > 3 &&
+            bodyLocation.some(seg => 
+            seg.x === headLocation.x 
+            && seg.y === headLocation.y)) {
+          
+            this.score = this.score <= 3 ? 0 : this.score - 3
+            this.segments = this.segments.slice(0, this.segments.length - 3)
+            this.maxSnakeLength = 3
+        }
     }
     update() {
+        
         //check if snake ate the food
         this.readyToTurn = true //to prevent spam turning
+        
         if (this.game.checkCollision(this, this.game.food)) {
             this.game.food.reset() // if food is eaten, remove and move it to another random location
             this.score++
@@ -28,7 +46,7 @@ class Snake {
                 ||
             this.x >= this.game.columns - 1 && this.speedX > 0
                 ||
-            this.y <= 0 && this.speedY < 0
+            this.y <= this.game.topMargin && this.speedY < 0
                 ||
             this.y >= this.game.rows - 1 && this.speedY > 0
         ) {
@@ -41,19 +59,34 @@ class Snake {
             this.segments.unshift({x:this.x, y:this.y})
             this.segments.length > this.maxSnakeLength 
             &&  this.segments.pop()
-               
-            
+            this.checkSnakeBodyCollision()
         }
+        if (this.score >= this.game.winningScore) {
+            this.game.gameOver = true
+            this.game.gameUi.gameOverUi()
+        }
+
+
     }
     draw() {
+        
         this.segments.forEach((segment,i) => {
-            this.game.ctx.fillStyle = i == 0 ? 'deeppink' : this.color  //head of snake is deeppink
+           
+            if (!i) {
+                this.game.ctx.fillStyle = 'purple'
+               
+            }   else {
+                this.game.ctx.fillStyle = this.color
+            } //head of snake is deeppink
+
             this.game.ctx.fillRect(segment.x * this.game.cellSize,
                                     segment.y * this.game.cellSize,
                                     this.width,
                                     this.height)
+            this.game.ctx.fillStyle = 'yellow '                                                     
         })
-
+        // this.game.ctx.font =  this.game.cellSize +'px' + ' Impact'
+        // this.game.ctx.fillText(this.playerName[0].toUpperCase()+ this.playerName.slice(1), this.segments.at(-1).x * this.game.cellSize , this.segments.at(-1).y * this.game.cellSize, this.game.cellSize * 1.5)
     }
 
     turnUp() {
@@ -92,8 +125,8 @@ class Snake {
 }
 
 class KeyboardArrows extends Snake {
-    constructor(game,x,y,speedX,speedY,color) {
-        super(game,x,y,speedX,speedY,color)
+    constructor(game,x,y,speedX,speedY,color,playerName) {
+        super(game,x,y,speedX,speedY,color,playerName)
         window.addEventListener('keydown', ({key}) => {
             if (key == 'ArrowUp') this.turnUp()
             else if (key == 'ArrowDown') this.turnDown()
@@ -104,8 +137,8 @@ class KeyboardArrows extends Snake {
 
 }
 class KeyboardWASD extends Snake {
-    constructor(game,x,y,speedX,speedY,color) {
-        super(game,x,y,speedX,speedY,color)
+    constructor(game,x,y,speedX,speedY,color,playerName) {
+        super(game,x,y,speedX,speedY,color,playerName)
         window.addEventListener('keydown',({key}) => {
             if (key.toLowerCase() == 'w') this.turnUp()
                 else if (key.toLowerCase() == 's') this.turnDown()
@@ -117,8 +150,8 @@ class KeyboardWASD extends Snake {
     }
 
 class ComputerAI extends Snake {
-    constructor(game,x,y,speedX,speedY,color) {
-        super(game,x,y,speedX,speedY,color)
+    constructor(game,x,y,speedX,speedY,color,playerName) {
+        super(game,x,y,speedX,speedY,color,playerName)
         this.turnTimer = 0
         this.turnInterval  = ~~(Math.random() * this.game.columns - 1)  // snake will randomly change direction at random times that update is called
     }

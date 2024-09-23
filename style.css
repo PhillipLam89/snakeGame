@@ -13,3 +13,29 @@
     max-height: 100%;
     max-width: 100%;
 }
+
+#controls {
+    position: absolute;
+    user-select: none;
+    color: white;
+    left: 50%;
+    translate: -50% -5%;
+    padding: 10px;
+    background-color: rgb(19, 16, 16);
+    opacity: 0.8;
+
+}
+#controls  button:hover {
+    cursor: pointer;
+}
+#scoreScreen {
+    padding: 5px;
+    display: flex; 
+    justify-content: space-between;
+ 
+}
+.left, .right {
+    border: 1px solid white;
+    padding: 2px;
+    height: min-content;
+}

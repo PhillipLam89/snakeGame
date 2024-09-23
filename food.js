@@ -7,7 +7,7 @@ class Food {
     }
     reset() {
         this.x = ~~(Math.random() * this.game.columns)
-        this.y = ~~(Math.random() * this.game.rows)
+        this.y = ~~(Math.random() * (this.game.rows-2) + 2)  //prevent food from spawning in top 2 areas (mushroom background)
     }
     draw() {
         this.game.ctx.fillStyle = 'white' //let food be white for now
