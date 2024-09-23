@@ -1,10 +1,10 @@
 
 window.onload = (e) => {
-    console.log(e)
+
     const canvas = document.getElementById('canvas1')
     const ctx = canvas.getContext('2d')
-    canvas.width = innerWidth
-    canvas.height = innerHeight
+    // canvas.width = innerWidth
+    // canvas.height = innerHeight
 
     const game = new Game(canvas, ctx)
    
@@ -26,17 +26,22 @@ class Game {
         this.ctx = context 
         this.width = this.canvas.width
         this.height = this.canvas.height
-       
+        this.gameOver = true
+
+        this.topMargin = 2
         this.cellSize = 40
         this.columns = null
         this.rows = null
         this.gameObj = null
         this.food = null
+        this.background = null
 
         this.eventTimer = 0
         this.eventInterval = 80
         this.updateEvent = false
 
+        this.winningScore = 25
+        this.gameUi = new Ui(this)
 
         this.resize(innerWidth,innerHeight)
         window.onresize = (e) => { //must use arrow func for 'this'
@@ -45,7 +50,9 @@ class Game {
     }
     resize(width, height) {
         this.canvas.width = ~~width - width % this.cellSize
+        // this.canvas.width = 200
         this.canvas.height = ~~height - height % this.cellSize
+        // this.canvas.height = 200
         this.ctx.fillStyle = 'dodgerblue'
         this.ctx.font = '40px Impact'
         this.ctx.textBaseline = 'top'
@@ -53,13 +60,24 @@ class Game {
         this.height = this.canvas.height
         this.columns = ~~(this.width / this.cellSize)
         this.rows = ~~(this.height / this.cellSize)
-        this.player1 = new KeyboardArrows(this,0,0,0,0,'blue') //creates snake when game is created
-        this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'red') //creates snake when game is created
-        this.player3 = new ComputerAI(this,0,this.rows-1,1,0,'black')
-        this.food = new Food(this)
-        this.gameObj = [this.player1, this.player2, this.player3, this.food]
-    }
+        this.background = new Background(this)
 
+    }
+    start() {
+        if (!this.gameOver) {
+            this.gameOver = true
+            this.gameUi.gameOverUi()
+        } else {
+            this.gameOver = false
+            this.gameUi.gamePlayUi()
+            this.player1 = new KeyboardArrows(this,0,this.topMargin,0,0,'blue','phillip') //creates snake when game is created
+            this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'red','human2') //creates snake when game is created
+            this.player3 = new ComputerAI(this,0,this.rows-1,1,0,'black','computer')
+            this.food = new Food(this)
+            this.gameObj = [this.player1, this.player2, this.player3, this.food]
+        }
+
+    }
     drawGrid() {
         let currentRow = 0 
         this.ctx.strokeStyle = 'goldenrod'
@@ -72,9 +90,7 @@ class Game {
         }
     }
     drawStatusText() {
-        this.ctx.fillText('P1: ' + this.player1.score, this.cellSize, this.cellSize)
-        this.ctx.fillText('P2: ' + this.player2.score, this.cellSize, this.cellSize *2.1)
-        this.ctx.fillText('P3: ' + this.player3.score, this.cellSize, this.cellSize*3.2)
+
     }
     checkCollision(a,b) {
         return a.x == b.x && a.y == b.y
@@ -90,15 +106,18 @@ class Game {
     }
     render(deltaTime) {
         this.handlePeriodicEvent(deltaTime)
-        if (this.updateEvent) {
+        if (this.updateEvent && !this.gameOver) {
             this.ctx.clearRect(0,0,this.width, this.height)
+            this.background.draw()
             this.drawGrid()
             this.gameObj.forEach(snake => {
-                snake.draw()
                 snake.update()
+                snake.draw()
+                
             })
-         this.drawStatusText()
+            this.gameUi.update()
         }
+
 
     }
 }
