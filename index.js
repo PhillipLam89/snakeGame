@@ -40,7 +40,7 @@ class Game {
         this.eventInterval = 80
         this.updateEvent = false
 
-        this.winningScore = 11
+        this.winningScore = 25
         this.gameUi = new Ui(this)
 
         this.resize(innerWidth,innerHeight)

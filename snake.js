@@ -90,7 +90,7 @@ class Snake {
     }
 
     turnUp() {
-        if (!this.speedY && this.readyToTurn) { //only allow vertical movement if currently moving horizontally (to prevent snake from reversing on itself)
+        if (!this.speedY && this.y > this.game.topMargin && this.readyToTurn) { //only allow vertical movement if currently moving horizontally (to prevent snake from reversing on itself)
             this.speedX = 0
             this.speedY = -1
             this.moving = true
@@ -99,7 +99,7 @@ class Snake {
 
     }
     turnDown() {
-        if (!this.speedY && this.readyToTurn) {
+        if (!this.speedY && this.y < this.game.rows - 1 && this.readyToTurn) {
             this.speedX = 0
             this.speedY = 1
             this.moving = true
@@ -107,7 +107,7 @@ class Snake {
         }
     }
     turnLeft() {
-        if (!this.speedX && this.readyToTurn) {
+        if (!this.speedX && this.x > 0 && this.readyToTurn) {
             this.speedX = -1
             this.speedY = 0
             this.moving = true
@@ -115,7 +115,7 @@ class Snake {
         }
     }
     turnRight() {
-        if (!this.speedX && this.readyToTurn) {
+        if (!this.speedX && this.x < this.game.columns - 1 && this.readyToTurn) {
             this.speedX = 1
             this.speedY = 0
             this.moving = true
