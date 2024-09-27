@@ -8,11 +8,16 @@ class Ui {
         this.allScoreBoards = [this.scoreBoard1, this.scoreBoard2, this.scoreBoard3]
         
         window.startButton.onclick = () => this.game.start()
+
+        //controls
+        this.player1Controls = window.player1Controls
+        this.player2Controls = window.player2Controls
+        this.player3Controls = window.player3Controls
     }
    
     update() {
         this.allScoreBoards.forEach((board,i) => {
-            board.innerText = 'P'+ (i + 1) + ': ' + this.game.gameObj[i].score
+            board.textContent = this.game.allPlayers[i].playerName + ': ' + this.game.gameObj[i].score
         })
     }
     
