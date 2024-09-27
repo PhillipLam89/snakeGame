@@ -22,7 +22,7 @@
     translate: -50% -5%;
     padding: 10px;
     background-color: rgb(19, 16, 16);
-    opacity: 0.8;
+
 
 }
 #controls  button:hover {
@@ -38,4 +38,17 @@
     border: 1px solid white;
     padding: 2px;
     height: min-content;
+}
+
+#scoreBoard1 {
+    color: red;
+    font-weight: bolder;    
+}
+#scoreBoard2 {
+    color: green;
+    font-weight: bolder;    
+}
+#scoreBoard3 {
+    color: yellow;
+    font-weight: bolder;    
 }

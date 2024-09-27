@@ -63,6 +63,18 @@ class Game {
         this.background = new Background(this)
 
     }
+    initPlayer1() {
+        const name = window.player1Name.value
+        if (this.gameUi.player1Controls.value === 'arrows') {
+            this.player1 = new KeyboardArrows(this,0,this.topMargin,0,0,'red',name  ||'P1') //creates snake when game is created
+        } else this.player1 = new ComputerAI(this,0,this.topMargin,0,0,'red',name|| 'AI 2') //creates snake when game is created
+    }
+    initPlayer2() {
+        const name = window.player2Name.value
+        if (this.gameUi.player2Controls.value === 'wasd') {
+            this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'green', name || 'P2') //creates snake when game is created
+        } else this.player2 = new ComputerAI(this,this.columns-1,this.rows-1,0,0,'green',name || 'AI 2') //creates snake when game is created
+    }
     start() {
         if (!this.gameOver) {
             this.gameOver = true
@@ -70,24 +82,25 @@ class Game {
         } else {
             this.gameOver = false
             this.gameUi.gamePlayUi()
-            this.player1 = new KeyboardArrows(this,0,this.topMargin,0,0,'blue','phillip') //creates snake when game is created
-            this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'red','human2') //creates snake when game is created
-            this.player3 = new ComputerAI(this,0,this.rows-1,1,0,'black','computer')
+            this.initPlayer1()
+            this.initPlayer2()
+            this.player3 = new ComputerAI(this,0,this.rows-1,1,0,'yellow','AI 3')
             this.food = new Food(this)
+            this.allPlayers = [this.player1, this.player2, this.player3]
             this.gameObj = [this.player1, this.player2, this.player3, this.food]
         }
 
     }
     drawGrid() {
-        let currentRow = 0 
-        this.ctx.strokeStyle = 'goldenrod'
-        while(currentRow < this.rows) {
-            for (let x = 0; x < this.columns; x++) {
-                    this.ctx.strokeRect(x*this.cellSize, currentRow*this.cellSize,
-                    this.cellSize, this.cellSize)
-            }
-            currentRow++
-        }
+        // let currentRow = 0 
+        // this.ctx.strokeStyle = 'red'
+        // while(currentRow < this.rows) {
+        //     for (let x = 0; x < this.columns; x++) {
+        //             this.ctx.strokeRect(x*this.cellSize, currentRow*this.cellSize,
+        //             this.cellSize, this.cellSize)
+        //     }
+        //     currentRow++
+        // }
     }
     drawStatusText() {
 

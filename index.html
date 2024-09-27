@@ -16,11 +16,11 @@
         </div>
         <div id="scoreScreen">
             <div class="left">
-                <p id="scoreBoard1">Player 1</p>
-                <p id="scoreBoard2">Player 2</p>
+                <p id="scoreBoard1">Player1:<span id="scoreBoard1Score"> 0</span></p>
+                <p id="scoreBoard2">Player2:<span id="scoreBoard2Score"> 0</span></p>
             </div>
             <div class="right">
-                <p id="scoreBoard3">Player 3</p>
+                <p id="scoreBoard3">Player3:<span id="scoreBoard2Score"> 0</span></p>
                 <!-- <p id="scoreBoard4">Player 4</p> -->
             </div>
         </div>
@@ -34,7 +34,10 @@
                         <option value="ai">Computer AI</option>
                         
                     </select>
-                 
+                 <div>
+                    <label for="player1Name">Name:</label>
+                    <input type="text" id="player1Name">
+                 </div>
                
                 </div>
 
@@ -44,14 +47,22 @@
                     <p class="playerLabel">Player 2</p>
                     <label for="player2Controls">Controls:</label>
                     <select name="player2Controls" id="player2Controls">
-                        <option value="arrows">Keyboard WASD</option>
+                        <option value="wasd">Keyboard WASD</option>
                         <option value="ai">Computer AI</option>
-                    </select>                   
+                    </select>   
+                    <div>
+                        <label for="player2Name">Name:</label>
+                        <input type="text" id="player2Name">
+                     </div>                
                 </div>
                 <hr>
                 <div class="player3">
                     <p class="playerLabel">Player 3 (AI)</p>
-                </div>                    
+                </div>    
+                <!-- <div>
+                    <label for="player3Name">Name:</label>
+                    <input type="text" id="player3Name">
+                 </div>                 -->
                 </div>
             </div>
         </div>
