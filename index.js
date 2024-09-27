@@ -44,8 +44,13 @@ class Game {
         this.gameUi = new Ui(this)
 
         this.resize(innerWidth,innerHeight)
+
+        fullScreenButton.onclick = () => 
+                this.toggleFullScreen()
+
         window.onresize = (e) => { //must use arrow func for 'this'
-          this.resize(e.currentTarget.innerWidth,e.currentTarget.innerHeight)
+          this.resize(e.currentTarget.innerWidth,
+                      e.currentTarget.innerHeight)
         }
     }
     resize(width, height) {
@@ -72,8 +77,8 @@ class Game {
     initPlayer2() {
         const name = window.player2Name.value
         if (this.gameUi.player2Controls.value === 'wasd') {
-            this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'green', name || 'P2') //creates snake when game is created
-        } else this.player2 = new ComputerAI(this,this.columns-1,this.rows-1,0,0,'green',name || 'AI 2') //creates snake when game is created
+            this.player2 = new KeyboardWASD(this,this.columns-1,this.rows-1,0,0,'orange', name || 'P2') //creates snake when game is created
+        } else this.player2 = new ComputerAI(this,this.columns-1,this.rows-1,0,0,'orange',name || 'AI 2') //creates snake when game is created
     }
     start() {
         if (!this.gameOver) {
@@ -108,6 +113,13 @@ class Game {
     checkCollision(a,b) {
         return a.x == b.x && a.y == b.y
     }
+    toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
     handlePeriodicEvent(deltaTime) {
         if (this.eventTimer < this.eventInterval) {
             this.eventTimer+= deltaTime
