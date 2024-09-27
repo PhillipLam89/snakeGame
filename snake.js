@@ -83,10 +83,11 @@ class Snake {
                                     segment.y * this.game.cellSize,
                                     this.width,
                                     this.height)
-            this.game.ctx.fillStyle = 'yellow '                                                     
+            this.game.ctx.fillStyle = 'white'                                                    
         })
+ 
         // this.game.ctx.font =  this.game.cellSize +'px' + ' Impact'
-        // this.game.ctx.fillText(this.playerName[0].toUpperCase()+ this.playerName.slice(1), this.segments.at(-1).x * this.game.cellSize , this.segments.at(-1).y * this.game.cellSize, this.game.cellSize * 1.5)
+        this.game.ctx.fillText(this.score, this.segments[0].x  * this.game.cellSize, this.segments[0].y* this.game.cellSize, this.game.cellSize)
     }
 
     turnUp() {
