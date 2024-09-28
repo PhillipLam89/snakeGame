@@ -27,6 +27,7 @@ class Game {
         this.width = this.canvas.width
         this.height = this.canvas.height
         this.gameOver = true
+        this.showGrid = false
 
         this.topMargin = 2
         this.cellSize = 40
@@ -40,11 +41,13 @@ class Game {
         this.eventInterval = 80
         this.updateEvent = false
 
-        this.winningScore = 25
+        this.winningScore = 25000
         this.gameUi = new Ui(this)
 
         this.resize(innerWidth,innerHeight)
 
+        window.gridButton.onclick = () =>
+            this.showGrid = !this.showGrid
         fullScreenButton.onclick = () => 
                 this.toggleFullScreen()
 
@@ -97,15 +100,16 @@ class Game {
 
     }
     drawGrid() {
-        // let currentRow = 0 
-        // this.ctx.strokeStyle = 'red'
-        // while(currentRow < this.rows) {
-        //     for (let x = 0; x < this.columns; x++) {
-        //             this.ctx.strokeRect(x*this.cellSize, currentRow*this.cellSize,
-        //             this.cellSize, this.cellSize)
-        //     }
-        //     currentRow++
-        // }
+        if (!this.showGrid) return
+        let currentRow = 0 
+        this.ctx.strokeStyle = 'purple'
+        while(currentRow < this.rows) {
+            for (let x = 0; x < this.columns; x++) {
+                    this.ctx.strokeRect(x*this.cellSize, currentRow*this.cellSize,
+                    this.cellSize, this.cellSize)
+            }
+            currentRow++
+        }
     }
     drawStatusText() {
 
@@ -129,6 +133,31 @@ class Game {
             this.updateEvent = true //we will only render every 200 ms
         }
     }
+    checkSnakeHeadsCollisions() {
+    
+        const allHeads = []
+        this.allPlayers.forEach(snake => allHeads.push(snake.segments[0]))
+        
+
+        for (let i = 0; i < allHeads.length - 1; i++) {
+            for (let j = (i+1); j < allHeads.length; j++) {
+                if (allHeads[i].x  === allHeads[j].x && allHeads[i].y === allHeads[j].y) {
+                    if (this.allPlayers[i].score > this.allPlayers[j].score) {
+                        this.allPlayers[i].score+=2
+  
+                    } else if (this.allPlayers[i].score < this.allPlayers[j].score) {
+                        this.allPlayers[j].score+=2
+ 
+                    }
+                }
+            }
+        }
+
+        }
+        
+
+
+    
     render(deltaTime) {
         this.handlePeriodicEvent(deltaTime)
         if (this.updateEvent && !this.gameOver) {
@@ -140,7 +169,13 @@ class Game {
                 snake.draw()
                 
             })
-            this.gameUi.update()
+            if (this.updateEvent && !this.gameOver) {
+                this.checkSnakeHeadsCollisions()
+                this.gameUi.update()
+                
+            }
+
+          
         }
 
 
